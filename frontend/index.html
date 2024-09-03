@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Image Retriever</title>
+		<script src="scripts.js" defer></script>
+		<style>
+
+			* {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				display: flex;
+				flex-direction: column;
+				height: 100vh;
+				margin: 0;
+				padding: 0;
+			}
+
+			header {
+				display: flex;
+				justify-content: space-between;
+				padding: .5rem 1.5rem;
+				height: 48px;
+				box-shadow: 0 5px 5px #00000010;
+				align-items: center;
+			}
+
+			button, input {
+				padding: 5px;
+			}
+
+			footer {
+				box-shadow: 0 -5px 5px #00000010;
+			}
+
+			footer > form {
+				display: flex;
+				justify-content: space-between;
+				padding: .5rem 1.5rem;
+			}
+
+			main {
+				height: 100%;
+				overflow-y: scroll;
+			}
+
+			#imageContainer {
+
+				column-count: 3; /* Number of columns */
+				column-gap: 10px; /* Gap between columns */
+				padding: 10px;
+			}
+
+			.gallery-item {
+				break-inside: avoid; /* Prevent breaking items between columns */
+				margin-bottom: 10px; /* Space between items */
+			}
+
+			#imageContainer img {
+				width: 100%;
+				height: auto;
+				display: block;
+				border-radius: 8px;
+				transition: transform 0.3s ease-in-out;
+			}
+
+			.gallery-item img:hover {
+				transform: scale(1.05); /* Slight zoom effect on hover */
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h2>Image Retriever</h2>
+			<div>
+				<button id="fetchImages">Fetch Images</button>
+				<button id="fetchLoremPicsumImages">Fetch Dummy Images</button>
+			</div>
+		</header>
+		<main>
+			<div id="imageContainer"></div>
+		</main>
+		<footer>
+			<form
+				action="http://localhost:8080/upload"
+				method="POST"
+				enctype="multipart/form-data"
+				id="uploadFile"
+			>
+				<input
+					type="file"
+					accept="image/*"
+					name="uploadfile"
+					onchange="handleImageUpload(event);"
+				/>
+				<button type="submit">Upload Image</button>
+			</form>
+		</footer>
+	</body>
+</html>

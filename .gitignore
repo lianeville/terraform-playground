@@ -1,0 +1,51 @@
+# Go
+/bin/
+/obj/
+*.exe
+*.test
+*.out
+*.log
+vendor/
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+venv/
+env/
+*.env
+*.venv
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform/
+.terraform.lock.hcl
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Miscellaneous
+*.coverage
+*.coverage.*
+*.nib
+*.orig
+*.rej
+*.tmp
+*.bak
+*.swp
+*.swo
