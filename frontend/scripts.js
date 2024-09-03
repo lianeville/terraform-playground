@@ -8,34 +8,7 @@ document.getElementById("fetchImagesGo").addEventListener("click", () => {
 document
 	.getElementById("fetchLoremPicsumImages")
 	.addEventListener("click", () => {
-		const numberOfImages = 15 // Number of images to fetch
-		const imageContainer = document.getElementById("imageContainer")
-		imageContainer.innerHTML = "" // Clear previous images
-
-		const requests = []
-		for (let i = 0; i < numberOfImages; i++) {
-			// Generate random width and height between 100 and 800 pixels
-			const width = Math.floor(Math.random() * (800 - 100 + 1)) + 100
-			const height = Math.floor(Math.random() * (800 - 100 + 1)) + 100
-			const url = `https://picsum.photos/${width}/${height}?random=${Math.random()}`
-			requests.push(fetch(url).then(response => response.blob()))
-		}
-
-		Promise.all(requests)
-			.then(blobs => {
-				blobs.forEach(blob => {
-					const galleryItem = document.createElement("div")
-					galleryItem.classList = "gallery-item"
-					const img = document.createElement("img")
-					img.src = URL.createObjectURL(blob)
-					img.alt = "Lorem Picsum Image"
-					galleryItem.append(img)
-					imageContainer.appendChild(galleryItem)
-				})
-			})
-			.catch(error => {
-				console.error("Error fetching Lorem Picsum images:", error)
-			})
+		fetchDummyImages()
 	})
 
 document.getElementById("uploadFile").addEventListener("submit", event => {
@@ -72,25 +45,67 @@ document.getElementById("uploadFile").addEventListener("submit", event => {
 	}
 })
 
+function fetchDummyImages() {
+	const numberOfImages = 15 // Number of images to fetch
+
+	const urls = []
+	for (let i = 0; i < numberOfImages; i++) {
+		// Generate random width and height between 100 and 800 pixels
+		const width = Math.floor(Math.random() * (800 - 100 + 1)) + 100
+		const height = Math.floor(Math.random() * (800 - 100 + 1)) + 100
+		const url = `https://picsum.photos/${width}/${height}?random=${Math.random()}`
+		urls.push(url)
+	}
+
+	updateImageContainer(urls)
+}
+
 function fetchImages(port) {
+	const notifsElement = document.querySelector(".fetch-notifs")
+	const statusElement = document.querySelector("div.fetch-notifs > span")
+	const wheelElement = document.querySelector("div.wheel")
+	const fetchButtonsElement = document.querySelector(".fetch-buttons")
+
+	notifsElement.classList.remove("hidden")
+	fetchButtonsElement.classList.add("hidden")
+	statusElement.textContent = "Fetching images..."
+	wheelElement.classList.remove("hidden")
+
 	fetch(`http://localhost:${port}/pics`)
 		.then(response => response.json())
-		.then(data => {
-			const imageContainer = document.getElementById("imageContainer")
-			imageContainer.innerHTML = "" // Clear previous images
+		.then(urls => {
+			updateImageContainer(urls)
 
-			// Assuming the data is an array of image URLs
-			data.forEach(url => {
-				const galleryItem = document.createElement("div")
-				galleryItem.classList = "gallery-item"
-				const img = document.createElement("img")
-				img.src = url
-				img.alt = "Image"
-				galleryItem.appendChild(img)
-				imageContainer.appendChild(galleryItem)
-			})
+			// Update the status to indicate done
+			statusElement.textContent = "Images fetched successfully!"
+			wheelElement.classList.add("hidden")
+
+			// Hide notifications and show fetch buttons after 2 seconds
+			setTimeout(() => {
+				notifsElement.classList.add("hidden")
+				fetchButtonsElement.classList.remove("hidden")
+			}, 2000)
 		})
 		.catch(error => {
 			console.error("Error fetching images:", error)
+
+			// Update the status to indicate error
+			statusElement.textContent = "Failed to fetch images."
+			wheelElement.classList.add("hidden")
 		})
+}
+
+function updateImageContainer(imageUrls) {
+	const imageContainer = document.getElementById("imageContainer")
+	imageContainer.innerHTML = "" // Clear previous images
+
+	imageUrls.forEach(url => {
+		const galleryItem = document.createElement("div")
+		galleryItem.classList.add("gallery-item")
+		const img = document.createElement("img")
+		img.src = url
+		img.alt = "Image"
+		galleryItem.appendChild(img)
+		imageContainer.appendChild(galleryItem)
+	})
 }

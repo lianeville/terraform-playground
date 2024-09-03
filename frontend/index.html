@@ -24,21 +24,21 @@
 			header {
 				display: flex;
 				justify-content: space-between;
-				padding: .5rem 1.5rem;
-				height: 48px;
+				padding: 0 1.5rem;
 				box-shadow: 0 5px 5px #00000010;
 				align-items: center;
+				height: 64px !important;
 			}
 
-			header > div {
+			.header-utils {
 				display: flex;
+				align-items: center;
 				gap: 3px;
 			}
 
 			button, input {
 				padding: 5px;
 				align-items: center;
-				/* border-color: #ccc; */
 			}
 
 			button {
@@ -82,10 +82,67 @@
 				padding: 10px;
 			}
 
+			.fetch-buttons {
+				display: flex;
+				align-items: center;
+				gap: 3px;
+
+				overflow: hidden;
+				opacity: 1;
+				transition: opacity .2s;
+			}
+
+			.fetch-buttons.hidden {
+				width: 0;
+				height: 0;
+				opacity: 0;
+			}
+
+			.fetch-notifs {
+				display: flex;
+				align-items: center;
+				gap: 3px;
+				width: 100%;
+
+				overflow: hidden;
+				opacity: 1;
+				transition: opacity .2s;
+			}
+
+			.fetch-notifs.hidden {
+				width: 0;
+				height: 0;
+				opacity: 0;
+			}
+
 			.gallery-item {
 				break-inside: avoid; /* Prevent breaking items between columns */
 				margin-bottom: 10px; /* Space between items */
 			}
+
+			.wheel {
+				width: 8px;
+				height: 8px;
+				border: 4px solid #3498db;
+				border-radius: 50%;
+				border-top: 4px solid transparent;
+				animation: spin 2s linear infinite;
+			}
+
+			.wheel.hidden {
+				display: none;
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+
 
 			#imageContainer img {
 				width: 100%;
@@ -102,17 +159,23 @@
 	</head>
 	<body>
 		<header>
-			<h2>Image Retriever</h2>
-			<div>
-				<button id="fetchImagesPython">
-					Fetch<img src="./assets/python_logo.svg" />
-				</button>
-				<button id="fetchImagesGo">
-					Fetch<img src="./assets/go_logo.svg" />
-				</button>
-				<button id="fetchLoremPicsumImages">
-					Fetch<img src="./assets/ghost.png" />
-				</button>
+			<h2>Images</h2>
+			<div class="header-utils">
+				<div class="fetch-buttons">
+					<button id="fetchImagesPython">
+						Fetch<img src="./assets/python_logo.svg" />
+					</button>
+					<button id="fetchImagesGo">
+						Fetch<img src="./assets/go_logo.svg" />
+					</button>
+					<button id="fetchLoremPicsumImages">
+						Fetch<img src="./assets/ghost.png" />
+					</button>
+				</div>
+				<div class="fetch-notifs hidden">
+					<div class="wheel hidden"></div>
+					<span></span>
+				</div>
 			</div>
 		</header>
 		<main>
