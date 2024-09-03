@@ -31,11 +31,17 @@ func uploadPicHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = uploadFileToS3(file, handler.Filename)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to upload file: %v", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf(`{"success": false, "message": "Failed to upload file: %v"}`, err), http.StatusInternalServerError)
 		return
 	}
 
-	fmt.Fprintf(w, "Successfully uploaded %q to S3\n", handler.Filename)
+	response := map[string]interface{}{
+		"success": true,
+		"message": fmt.Sprintf("Successfully uploaded %q to S3", handler.Filename),
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func getPicsHandler(w http.ResponseWriter, r *http.Request) {

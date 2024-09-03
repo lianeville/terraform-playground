@@ -87,11 +87,22 @@ def upload_pic():
     if file and file.filename:
         # Upload file to S3
         if upload_to_s3(file, bucket_name):
-            return "File successfully uploaded"
+            response = {
+                "success": True,
+                "message": "File successfully uploaded"
+            }
         else:
-            return "Failed to upload file"
+            response = {
+                "success": False,
+                "message": "Failed to upload file"
+            }
+    else:
+        response = {
+            "success": False,
+            "message": "No file provided or filename is empty"
+        }
 
-    return None
+    return jsonify(response)
 
 
 if __name__ == '__main__':
