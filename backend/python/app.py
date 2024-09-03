@@ -76,12 +76,10 @@ def upload_pic():
         return jsonify({"error": "There are no buckets."}), 400
     bucket_name = all_buckets[0]['Name']
 
-    print(request.files)
-
-    if 'image' not in request.files:
+    if 'uploadfile' not in request.files:
         return "No file part"
 
-    file = request.files['image']
+    file = request.files['uploadfile']
 
     if file.filename == '':
         return "No selected file"

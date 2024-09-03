@@ -64,8 +64,6 @@ func getPicsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(files)
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(files); err != nil {
