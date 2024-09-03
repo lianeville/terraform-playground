@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"mime/multipart"
+	"strconv"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -97,7 +98,15 @@ func getBucketFiles(svc *s3.S3, bucketName string) ([]string, error) {
 		return nil, fmt.Errorf("failed to list objects in bucket: %w", err)
 	}
 
+	printColor("Retrieved " + strconv.Itoa(len(urls)) + " images in Go")
+
 	return urls, nil
+}
+
+func printColor(str string) {
+	rgbColor := "\033[38;2;173;215;255m"
+	reset := "\033[0m"
+	fmt.Println(rgbColor + str + reset)
 }
 
 func generatePresignedURL(svc *s3.S3, bucket, key string, expiration time.Duration) string {

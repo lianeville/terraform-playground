@@ -29,6 +29,11 @@ def get_bucket_files(bucket_name):
 
     except Exception as e:
         print(f'Error listing objects: {e}')
+
+    GREEN = '\033[92m'
+    RESET = '\033[0m'
+
+    print(f"{GREEN}Retrieved {len(pics)} images in Python{RESET}")
     return pics
 
 
@@ -62,6 +67,7 @@ def home():
 
 @app.route("/pics")
 def get_pics():
+
     if len(all_buckets) < 1:
         return jsonify({"error": "There are no buckets."}), 400
     bucket_name = all_buckets[0]['Name']
@@ -71,35 +77,46 @@ def get_pics():
 
 
 @app.route("/upload", methods=["POST"])
-def upload_pic():
+def upload_pics():
+
     if len(all_buckets) < 1:
         return jsonify({"error": "There are no buckets."}), 400
     bucket_name = all_buckets[0]['Name']
 
-    if 'uploadfile' not in request.files:
-        return "No file part"
+    # Check if the request has files
+    if 'uploadfiles' not in request.files:
+        return jsonify({"error": "No files part in the request"}), 400
 
-    file = request.files['uploadfile']
+    files = request.files.getlist('uploadfiles')
 
-    if file.filename == '':
-        return "No selected file"
+    if not files or all(file.filename == '' for file in files):
+        return jsonify({"error": "No files selected"}), 400
 
-    if file and file.filename:
-        # Upload file to S3
-        if upload_to_s3(file, bucket_name):
-            response = {
-                "success": True,
-                "message": "File successfully uploaded"
-            }
+    successful_uploads = []
+    failed_uploads = []
+
+    for file in files:
+        if file and file.filename:
+            # Upload file to S3
+            if upload_to_s3(file, bucket_name):
+                successful_uploads.append(file.filename)
+            else:
+                failed_uploads.append(file.filename)
         else:
-            response = {
-                "success": False,
-                "message": "Failed to upload file"
-            }
+            failed_uploads.append(file.filename)
+
+    if successful_uploads:
+        response = {
+            "success": True,
+            "message": "Files successfully uploaded",
+            "successful_uploads": successful_uploads,
+            "failed_uploads": failed_uploads
+        }
     else:
         response = {
             "success": False,
-            "message": "No file provided or filename is empty"
+            "message": "Failed to upload files",
+            "failed_uploads": failed_uploads
         }
 
     return jsonify(response)

@@ -1,5 +1,8 @@
-document.getElementById("fetchImages").addEventListener("click", () => {
-	fetchImages()
+document.getElementById("fetchImagesPython").addEventListener("click", () => {
+	fetchImages(8080)
+})
+document.getElementById("fetchImagesGo").addEventListener("click", () => {
+	fetchImages(8081)
 })
 
 document
@@ -38,32 +41,39 @@ document
 document.getElementById("uploadFile").addEventListener("submit", event => {
 	event.preventDefault() // Prevent form from submitting the traditional way
 
-	const fileInput = document.getElementById("fileInput")
-	const file = fileInput.files[0]
-	if (file) {
-		const formData = new FormData()
-		formData.append("uploadfile", file)
+	port = event.submitter.dataset.port
 
-		fetch("http://localhost:8080/upload", {
+	const fileInput = document.getElementById("fileInput")
+	const files = fileInput.files // Get all selected files
+
+	if (files.length > 0) {
+		const formData = new FormData()
+
+		// Append each file to the FormData object
+		for (let i = 0; i < files.length; i++) {
+			formData.append("uploadfiles", files[i])
+		}
+
+		fetch(`http://localhost:${port}/upload`, {
 			method: "POST",
 			body: formData,
 		})
 			.then(response => response.json())
 			.then(data => {
-				console.log("File uploaded successfully:", data)
+				console.log("Files uploaded successfully:", data)
 				// Fetch images after successful upload
-				fetchImages()
+				fetchImages(port)
 			})
 			.catch(error => {
-				console.error("Error uploading file or fetching images:", error)
+				console.error("Error uploading files or fetching images:", error)
 			})
 	} else {
-		alert("Please select a file to upload.")
+		alert("Please select at least one file to upload.")
 	}
 })
 
-function fetchImages() {
-	fetch("http://localhost:8080/pics")
+function fetchImages(port) {
+	fetch(`http://localhost:${port}/pics`)
 		.then(response => response.json())
 		.then(data => {
 			const imageContainer = document.getElementById("imageContainer")

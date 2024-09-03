@@ -21,27 +21,47 @@ func uploadPicHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	file, handler, err := r.FormFile("uploadfile")
-	if err != nil {
-		log.Printf("Error retrieving the file: %v", err)
-		http.Error(w, "Error retrieving the file", http.StatusBadRequest)
-		return
-	}
-	defer file.Close()
-
-	err = uploadFileToS3(file, handler.Filename)
-	if err != nil {
-		http.Error(w, fmt.Sprintf(`{"success": false, "message": "Failed to upload file: %v"}`, err), http.StatusInternalServerError)
+	// Retrieve multiple files
+	files := r.MultipartForm.File["uploadfiles"]
+	if len(files) == 0 {
+		http.Error(w, "No files uploaded", http.StatusBadRequest)
 		return
 	}
 
-	response := map[string]interface{}{
-		"success": true,
-		"message": fmt.Sprintf("Successfully uploaded %q to S3", handler.Filename),
+	var uploadResults []map[string]interface{}
+	for _, fileHeader := range files {
+		file, err := fileHeader.Open()
+		if err != nil {
+			log.Printf("Error opening file: %v", err)
+			uploadResults = append(uploadResults, map[string]interface{}{
+				"filename": fileHeader.Filename,
+				"success":  false,
+				"message":  fmt.Sprintf("Failed to open file: %v", err),
+			})
+			continue
+		}
+		defer file.Close()
+
+		err = uploadFileToS3(file, fileHeader.Filename)
+		if err != nil {
+			uploadResults = append(uploadResults, map[string]interface{}{
+				"filename": fileHeader.Filename,
+				"success":  false,
+				"message":  fmt.Sprintf("Failed to upload file: %v", err),
+			})
+			continue
+		}
+
+		uploadResults = append(uploadResults, map[string]interface{}{
+			"filename": fileHeader.Filename,
+			"success":  true,
+			"message":  fmt.Sprintf("Successfully uploaded %q to S3", fileHeader.Filename),
+		})
 	}
 
+	// Return the results as JSON
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	json.NewEncoder(w).Encode(uploadResults)
 }
 
 func getPicsHandler(w http.ResponseWriter, r *http.Request) {
