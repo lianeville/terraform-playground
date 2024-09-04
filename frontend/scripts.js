@@ -21,21 +21,11 @@ document.getElementById("uploadFile").addEventListener("submit", event => {
 
 	if (files.length > 0) {
 		const formData = new FormData()
-
-		// Append each file to the FormData object
 		for (let i = 0; i < files.length; i++) {
 			formData.append("uploadfiles", files[i])
 		}
 
-		const uploadNotifsElement = document.querySelector(".upload-notifs")
-		const statusElement = document.querySelector("div.upload-notifs > span")
-		const wheelElement = document.querySelector(".upload-notifs div.wheel")
-		const uploadButtonsElement = document.querySelector(".upload-buttons")
-
-		uploadNotifsElement.classList.remove("hidden")
-		uploadButtonsElement.classList.add("hidden")
-		statusElement.textContent = "Uploading files..."
-		wheelElement.classList.remove("hidden")
+		sendNotif("Uploading files..", "upload", "default", false, true)
 
 		fetch(`http://localhost:${port}/upload`, {
 			method: "POST",
@@ -43,34 +33,20 @@ document.getElementById("uploadFile").addEventListener("submit", event => {
 		})
 			.then(response => response.json())
 			.then(data => {
+				console.log(files.length)
 				console.log("Files uploaded successfully:", data)
-				// Fetch images after successful upload
 				fetchImages(port)
-				wheelElement.classList.add("hidden")
-				statusElement.textContent = "Files uploaded successfully"
-
-				// Clear the file input
+				message = files.length + " files uploaded successfully."
+				sendNotif(message, "upload", "success", true)
 				fileInput.value = ""
-
-				// Hide notifications and show upload buttons after 2 seconds
-				setTimeout(() => {
-					uploadNotifsElement.classList.add("hidden")
-					uploadButtonsElement.classList.remove("hidden")
-				}, 2000)
 			})
 			.catch(error => {
 				console.error("Error uploading files or fetching images:", error)
-
-				// Update the status to indicate error
-				statusElement.textContent = "Failed to upload files."
-				wheelElement.classList.add("hidden")
-				uploadButtonsElement.classList.remove("hidden")
-
-				// Clear the file input in case of error as well
+				sendNotif("Failed to upload files.", "upload", "error", true)
 				fileInput.value = ""
 			})
 	} else {
-		alert("Please select at least one file to upload.")
+		sendNotif("No files selected.", "upload", "error", true)
 	}
 })
 
@@ -90,37 +66,22 @@ document.getElementById("uploadFile").addEventListener("submit", event => {
 // }
 
 function fetchImages(port) {
-	const notifsElement = document.querySelector(".fetch-notifs")
-	const statusElement = document.querySelector("div.fetch-notifs > span")
-	const wheelElement = document.querySelector("div.wheel")
-	const fetchButtonsElement = document.querySelector(".fetch-buttons")
-
-	notifsElement.classList.remove("hidden")
-	fetchButtonsElement.classList.add("hidden")
-	statusElement.textContent = "Fetching images..."
-	wheelElement.classList.remove("hidden")
+	sendNotif("Fetching images...", "fetch", "default", false, true)
 
 	fetch(`http://localhost:${port}/pics`)
 		.then(response => response.json())
 		.then(urls => {
-			updateImageContainer(urls)
-
-			// Update the status to indicate done
-			statusElement.textContent = "Images fetched successfully!"
-			wheelElement.classList.add("hidden")
-
-			// Hide notifications and show fetch buttons after 2 seconds
-			setTimeout(() => {
-				notifsElement.classList.add("hidden")
-				fetchButtonsElement.classList.remove("hidden")
-			}, 2000)
+			if (urls.length == 0) {
+				sendNotif("No images uploaded yet.", "fetch", "default", true)
+			} else {
+				sendNotif("Images fetched.", "fetch", "success", true)
+				updateImageContainer(urls)
+			}
 		})
 		.catch(error => {
 			console.error("Error fetching images:", error)
 
-			// Update the status to indicate error
-			statusElement.textContent = "Failed to fetch images."
-			wheelElement.classList.add("hidden")
+			sendNotif("Failed to fetch images.", "fetch", "error", true)
 		})
 }
 
@@ -137,4 +98,48 @@ function updateImageContainer(imageUrls) {
 		galleryItem.appendChild(img)
 		imageContainer.appendChild(galleryItem)
 	})
+}
+
+function sendNotif(
+	message,
+	element,
+	status = "default",
+	reset = false,
+	useWheel = false
+) {
+	parentEl =
+		element == "fetch"
+			? document.getElementById("header-utils")
+			: document.getElementById("footer-utils")
+
+	const buttonsEl = parentEl.querySelector(".buttons")
+	const notifsEl = parentEl.querySelector(".notifs")
+	const statusEl = notifsEl.querySelector("span")
+	const wheelEl = parentEl.querySelector(".wheel")
+
+	if (useWheel) {
+		wheelEl.classList.remove("hidden")
+	} else {
+		wheelEl.classList.add("hidden")
+	}
+
+	notifsEl.classList.remove("hidden")
+	buttonsEl.classList.add("hidden")
+
+	statusEl.textContent = message
+
+	if (status == "success") {
+		statusEl.style.color = "green"
+	} else if (status == "error") {
+		statusEl.style.color = "red"
+	} else {
+		statusEl.style.color = "black"
+	}
+
+	if (reset) {
+		setTimeout(() => {
+			notifsEl.classList.add("hidden")
+			buttonsEl.classList.remove("hidden")
+		}, 2000)
+	}
 }

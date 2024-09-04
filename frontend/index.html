@@ -31,7 +31,7 @@
 				height: 64px !important;
 			}
 
-			.header-utils {
+			#header-utils {
 				display: flex;
 				align-items: center;
 				gap: 3px;
@@ -85,7 +85,7 @@
 				padding: 10px;
 			}
 
-			.fetch-buttons {
+			.buttons {
 				display: flex;
 				align-items: center;
 				gap: 3px;
@@ -95,13 +95,13 @@
 				transition: opacity .2s;
 			}
 
-			.fetch-buttons.hidden {
+			.buttons.hidden {
 				width: 0;
 				height: 0;
 				opacity: 0;
 			}
 
-			.fetch-notifs {
+			.notifs {
 				display: flex;
 				align-items: center;
 				gap: 3px;
@@ -112,7 +112,7 @@
 				transition: opacity .2s;
 			}
 
-			.fetch-notifs.hidden {
+			.notifs.hidden {
 				width: 0;
 				height: 0;
 				opacity: 0;
@@ -145,7 +145,7 @@
 				}
 			}
 
-			.upload-buttons {
+			/* .upload-buttons {
 				overflow: hidden;
 				opacity: 1;
 				width: 100%;
@@ -172,7 +172,7 @@
 			.upload-notifs.hidden {
 				opacity: 0;
 				width: 0;
-			}
+			} */
 
 			#imageContainer img {
 				width: 100%;
@@ -190,8 +190,8 @@
 	<body>
 		<header>
 			<h2>Playground</h2>
-			<div class="header-utils">
-				<div class="fetch-buttons">
+			<div id="header-utils">
+				<div class="buttons">
 					<button id="fetchImagesPython">
 						Fetch<img src="./assets/python_logo.svg" />
 					</button>
@@ -202,7 +202,7 @@
 						Fetch<img src="./assets/ghost.png" />
 					</button> -->
 				</div>
-				<div class="fetch-notifs hidden">
+				<div class="notifs hidden">
 					<div class="wheel hidden"></div>
 					<span></span>
 				</div>
@@ -221,7 +221,7 @@
 					multiple
 				/>
 				<div id="footer-utils">
-					<div class="upload-buttons">
+					<div class="buttons">
 						<button type="submit" data-port="8080">
 							Upload<img src="./assets/python_logo.svg" />
 						</button>
@@ -229,7 +229,7 @@
 							Upload<img src="./assets/go_logo.svg" />
 						</button>
 					</div>
-					<div class="upload-notifs hidden">
+					<div class="notifs hidden">
 						<div class="wheel hidden"></div>
 						<span></span>
 					</div>
