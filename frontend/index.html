@@ -19,6 +19,7 @@
 				height: 100vh;
 				margin: 0;
 				padding: 0;
+				overflow-y: hidden;
 			}
 
 			header {
@@ -33,6 +34,12 @@
 			.header-utils {
 				display: flex;
 				align-items: center;
+				gap: 3px;
+			}
+
+			#footer-utils {
+				display: flex;
+				flex-direction: row;
 				gap: 3px;
 			}
 
@@ -62,12 +69,8 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				padding: .5rem 1.5rem;
-			}
-
-			footer div {
-				display: flex;
-				gap: 3px;
+				height: 64px;
+				padding: 0 1.5rem;
 			}
 
 			main {
@@ -142,7 +145,34 @@
 				}
 			}
 
+			.upload-buttons {
+				overflow: hidden;
+				opacity: 1;
+				width: 100%;
+				transition: opacity .2s;
+				display: flex;
+				align-items: center;
+				gap: 3px;
+			}
 
+			.upload-buttons.hidden {
+				opacity: 0;
+				width: 0;
+			}
+
+			.upload-notifs {
+				display: flex;
+				align-items: center;
+				overflow: hidden;
+				opacity: 1;
+				width: 100%;
+				transition: opacity .2s;
+			}
+
+			.upload-notifs.hidden {
+				opacity: 0;
+				width: 0;
+			}
 
 			#imageContainer img {
 				width: 100%;
@@ -159,7 +189,7 @@
 	</head>
 	<body>
 		<header>
-			<h2>Images</h2>
+			<h2>Playground</h2>
 			<div class="header-utils">
 				<div class="fetch-buttons">
 					<button id="fetchImagesPython">
@@ -168,9 +198,9 @@
 					<button id="fetchImagesGo">
 						Fetch<img src="./assets/go_logo.svg" />
 					</button>
-					<button id="fetchLoremPicsumImages">
+					<!-- <button id="fetchLoremPicsumImages">
 						Fetch<img src="./assets/ghost.png" />
-					</button>
+					</button> -->
 				</div>
 				<div class="fetch-notifs hidden">
 					<div class="wheel hidden"></div>
@@ -190,13 +220,19 @@
 					id="fileInput"
 					multiple
 				/>
-				<div>
-					<button type="submit" data-port="8080">
-						Upload<img src="./assets/python_logo.svg" />
-					</button>
-					<button type="submit" data-port="8081">
-						Upload<img src="./assets/go_logo.svg" />
-					</button>
+				<div id="footer-utils">
+					<div class="upload-buttons">
+						<button type="submit" data-port="8080">
+							Upload<img src="./assets/python_logo.svg" />
+						</button>
+						<button type="submit" data-port="8081">
+							Upload<img src="./assets/go_logo.svg" />
+						</button>
+					</div>
+					<div class="upload-notifs hidden">
+						<div class="wheel hidden"></div>
+						<span></span>
+					</div>
 				</div>
 			</form>
 		</footer>

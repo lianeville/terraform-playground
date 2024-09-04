@@ -14,7 +14,7 @@ document
 document.getElementById("uploadFile").addEventListener("submit", event => {
 	event.preventDefault() // Prevent form from submitting the traditional way
 
-	port = event.submitter.dataset.port
+	const port = event.submitter.dataset.port
 
 	const fileInput = document.getElementById("fileInput")
 	const files = fileInput.files // Get all selected files
@@ -27,6 +27,16 @@ document.getElementById("uploadFile").addEventListener("submit", event => {
 			formData.append("uploadfiles", files[i])
 		}
 
+		const uploadNotifsElement = document.querySelector(".upload-notifs")
+		const statusElement = document.querySelector("div.upload-notifs > span")
+		const wheelElement = document.querySelector(".upload-notifs div.wheel")
+		const uploadButtonsElement = document.querySelector(".upload-buttons")
+
+		uploadNotifsElement.classList.remove("hidden")
+		uploadButtonsElement.classList.add("hidden")
+		statusElement.textContent = "Uploading files..."
+		wheelElement.classList.remove("hidden")
+
 		fetch(`http://localhost:${port}/upload`, {
 			method: "POST",
 			body: formData,
@@ -36,9 +46,28 @@ document.getElementById("uploadFile").addEventListener("submit", event => {
 				console.log("Files uploaded successfully:", data)
 				// Fetch images after successful upload
 				fetchImages(port)
+				wheelElement.classList.add("hidden")
+				statusElement.textContent = "Files uploaded successfully"
+
+				// Clear the file input
+				fileInput.value = ""
+
+				// Hide notifications and show upload buttons after 2 seconds
+				setTimeout(() => {
+					uploadNotifsElement.classList.add("hidden")
+					uploadButtonsElement.classList.remove("hidden")
+				}, 2000)
 			})
 			.catch(error => {
 				console.error("Error uploading files or fetching images:", error)
+
+				// Update the status to indicate error
+				statusElement.textContent = "Failed to upload files."
+				wheelElement.classList.add("hidden")
+				uploadButtonsElement.classList.remove("hidden")
+
+				// Clear the file input in case of error as well
+				fileInput.value = ""
 			})
 	} else {
 		alert("Please select at least one file to upload.")
