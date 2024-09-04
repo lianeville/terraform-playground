@@ -5,11 +5,11 @@ document.getElementById("fetchImagesGo").addEventListener("click", () => {
 	fetchImages(8081)
 })
 
-document
-	.getElementById("fetchLoremPicsumImages")
-	.addEventListener("click", () => {
-		fetchDummyImages()
-	})
+// document
+// 	.getElementById("fetchLoremPicsumImages")
+// 	.addEventListener("click", () => {
+// 		fetchDummyImages()
+// 	})
 
 document.getElementById("uploadFile").addEventListener("submit", event => {
 	event.preventDefault() // Prevent form from submitting the traditional way
@@ -74,20 +74,20 @@ document.getElementById("uploadFile").addEventListener("submit", event => {
 	}
 })
 
-function fetchDummyImages() {
-	const numberOfImages = 15 // Number of images to fetch
+// function fetchDummyImages() {
+// 	const numberOfImages = 15 // Number of images to fetch
 
-	const urls = []
-	for (let i = 0; i < numberOfImages; i++) {
-		// Generate random width and height between 100 and 800 pixels
-		const width = Math.floor(Math.random() * (800 - 100 + 1)) + 100
-		const height = Math.floor(Math.random() * (800 - 100 + 1)) + 100
-		const url = `https://picsum.photos/${width}/${height}?random=${Math.random()}`
-		urls.push(url)
-	}
+// 	const urls = []
+// 	for (let i = 0; i < numberOfImages; i++) {
+// 		// Generate random width and height between 100 and 800 pixels
+// 		const width = Math.floor(Math.random() * (800 - 100 + 1)) + 100
+// 		const height = Math.floor(Math.random() * (800 - 100 + 1)) + 100
+// 		const url = `https://picsum.photos/${width}/${height}?random=${Math.random()}`
+// 		urls.push(url)
+// 	}
 
-	updateImageContainer(urls)
-}
+// 	updateImageContainer(urls)
+// }
 
 function fetchImages(port) {
 	const notifsElement = document.querySelector(".fetch-notifs")
