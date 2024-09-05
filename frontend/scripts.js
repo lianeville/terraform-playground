@@ -14,6 +14,7 @@ document.getElementById("fetchImagesGo").addEventListener("click", () => {
 document.getElementById("uploadFile").addEventListener("submit", event => {
 	event.preventDefault() // Prevent form from submitting the traditional way
 
+	console.log("hi")
 	const port = event.submitter.dataset.port
 
 	const fileInput = document.getElementById("fileInput")
@@ -32,9 +33,7 @@ document.getElementById("uploadFile").addEventListener("submit", event => {
 			body: formData,
 		})
 			.then(response => response.json())
-			.then(data => {
-				console.log(files.length)
-				console.log("Files uploaded successfully:", data)
+			.then(() => {
 				fetchImages(port)
 				message = files.length + " files uploaded successfully."
 				sendNotif(message, "upload", "success", true)
