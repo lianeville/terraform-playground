@@ -37,7 +37,8 @@ if [ -z "$DIGITALOCEAN_TOKEN" ]; then
   export DIGITALOCEAN_TOKEN
 fi
 
+echo "Setup complete!"
+echo "Initializing Terraform..."
+
 cd infrastructure/
 terraform init
-
-echo "Setup complete!"
