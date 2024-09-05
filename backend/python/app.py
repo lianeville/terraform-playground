@@ -33,7 +33,7 @@ def get_bucket_files(bucket_name):
     GREEN = '\033[92m'
     RESET = '\033[0m'
 
-    print(f"{GREEN}Retrieved {len(pics)} images in Python{RESET}")
+    print(f"{GREEN}Retrieved {len(pics)} images in Python{RESET}", flush=True)
     return pics
 
 
@@ -49,6 +49,7 @@ def upload_to_s3(file, bucket_name, object_name=None):
             Params={'Bucket': bucket_name, 'Key': object_name},
             ExpiresIn=3600  # URL expiration time in seconds
         )
+
         return url
     except FileNotFoundError:
         print("The file was not found")
@@ -118,6 +119,14 @@ def upload_pics():
             "message": "Failed to upload files",
             "failed_uploads": failed_uploads
         }
+
+    GREEN = '\033[92m'
+    RESET = '\033[0m'
+
+    message = f"{GREEN}Uploaded {
+        len(successful_uploads)} images in Python{RESET}"
+
+    print(message, flush=True)
 
     return jsonify(response)
 

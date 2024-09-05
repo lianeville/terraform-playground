@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func uploadPicHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,6 +59,9 @@ func uploadPicHandler(w http.ResponseWriter, r *http.Request) {
 			"message":  fmt.Sprintf("Successfully uploaded %q to S3", fileHeader.Filename),
 		})
 	}
+
+	message := "Uploaded " + strconv.Itoa(len(uploadResults)) + " images in Go"
+	printColor(message)
 
 	// Return the results as JSON
 	w.Header().Set("Content-Type", "application/json")
