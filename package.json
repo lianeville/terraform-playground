@@ -1,6 +1,9 @@
 {
-  "dependencies": {
-    "concurrently": "^8.2.2",
-    "http-server": "^14.1.1"
-  }
+	"scripts": {
+		"start": "concurrently \"cd backend/go && air\" \"cd backend/python && nodemon app.py\" \"cd frontend && http-server -p 5050\""
+	},
+	"dependencies": {
+		"concurrently": "^8.2.2",
+		"http-server": "^14.1.1"
+	}
 }
