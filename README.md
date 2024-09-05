@@ -12,10 +12,6 @@ Welcome to **Playground**, an image uploading and retrieval platform with dual b
 
 -  [Installation and Setup](#installation-and-setup)
 
--  [Contributing](#contributing)
-
--  [License](#license)
-
 ## Technologies Used
 
 -  **Frontend**: Vanilla HTML, CSS, JavaScript
@@ -82,11 +78,3 @@ sh setup.sh
 ```bash
 npm run start
 ```
-
-## Contributing
-
-If you'd like to contribute to Playground, please fork the repository and submit a pull request. All contributions are welcome!
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
