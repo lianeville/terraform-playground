@@ -72,7 +72,7 @@ cd terraform-playground
 2. Run startup script (Git Bash):
 
 ```bash
-sh startup.sh
+sh setup.sh
 ```
 
 3. Follow the setup script, entering `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SECRET_ACCESS_KEY`.
