@@ -38,5 +38,3 @@ if [ -z "$DIGITALOCEAN_TOKEN" ]; then
 fi
 
 echo "Setup complete!"
-
-npm run start
